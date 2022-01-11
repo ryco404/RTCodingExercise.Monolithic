@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RTCodingExercise.Monolithic", "RTCodingExercise.Monolithic\RTCodingExercise.Monolithic.csproj", "{67151444-B2AA-445F-B07B-B2C5864EF6F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RTCodingExercise.Monolithic.Tests", "RTCodingExercise.Monolithic.Tests\RTCodingExercise.Monolithic.Tests.csproj", "{A4823E96-A06E-4013-86FC-C5E207B6AC9B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{67151444-B2AA-445F-B07B-B2C5864EF6F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67151444-B2AA-445F-B07B-B2C5864EF6F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67151444-B2AA-445F-B07B-B2C5864EF6F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67151444-B2AA-445F-B07B-B2C5864EF6F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4823E96-A06E-4013-86FC-C5E207B6AC9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4823E96-A06E-4013-86FC-C5E207B6AC9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4823E96-A06E-4013-86FC-C5E207B6AC9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4823E96-A06E-4013-86FC-C5E207B6AC9B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {73B82C54-04C2-40A5-B275-4311366EDAE4}
+	EndGlobalSection
+EndGlobal
