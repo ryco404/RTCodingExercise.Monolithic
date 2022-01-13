@@ -6,8 +6,6 @@ It’s great that you are eager to join our team. To make your life a bit easier
 
 This is the Monolithic style application, you can find a Microservices based boilerplate here
 
-This project is:
-
 ## Forking
 Please fork this project into your own github repository, this repository has been locked and cannot be committed to.
 
