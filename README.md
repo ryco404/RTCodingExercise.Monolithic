@@ -4,7 +4,7 @@ If you have found your way here, you have more than likely been asked by Regtran
 
 It’s great that you are eager to join our team. To make your life a bit easier we have provided you with a basic boilerplate project. 
 
-This is the Monolithic style application, you can find a Microservices based boilerplate here
+This is the Monolithic style application, you can find a Microservices based boilerplate here: https://github.com/Regtransfers/RTCodingExercise.Microservices
 
 ## Forking
 Please fork this project into your own github repository, this repository has been locked and cannot be committed to.
