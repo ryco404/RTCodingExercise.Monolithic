@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RTCodingExercise.Monolithic.Models;
+﻿using RTCodingExercise.Monolithic.Models;
+using RTCodingExercise.Monolithic.Services;
 using System.Diagnostics;
 
 namespace RTCodingExercise.Monolithic.Controllers
@@ -7,24 +7,39 @@ namespace RTCodingExercise.Monolithic.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ApplicationDbContext _context;
+        private readonly IPlateService _plateSvc;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+        public HomeController(ILogger<HomeController> logger, IPlateService plateSvc)
         {
             _logger = logger;
-            _context = context;
+            _plateSvc = plateSvc;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
-            var plates = await _context.Plates.ToListAsync();
+            var plates = await _plateSvc.GetPlatesPagedAsync(page ?? 1);
 
             return View(plates);
         }
 
-        public IActionResult Privacy()
+        public IActionResult Add()
         {
-            return View();
+            var vm = new PlateViewModel();
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(PlateViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                await _plateSvc.SavePlateAsync(vm);
+
+                return View("ConfirmAdd", vm);
+            }
+
+            return View(vm);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

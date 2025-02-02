@@ -1,4 +1,7 @@
-﻿namespace RTCodingExercise.Monolithic
+﻿using RTCodingExercise.Monolithic.Models;
+using RTCodingExercise.Monolithic.Services;
+
+namespace RTCodingExercise.Monolithic
 {
     public class Startup
     {
@@ -21,6 +24,13 @@
                         //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                     }));
+
+            services.Configure<QueryOptions>(Configuration.GetSection(nameof(QueryOptions)));
+
+            services.AddTransient<IEntityService, EntityService>();
+            services.AddTransient<IPlateService, PlateService>();
+
+            services.AddSingleton((_) => new PlateLetterHelper());
 
             services.AddControllers();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
@@ -46,13 +56,6 @@
             }
 
             app.UseStaticFiles();
-
-            // Make work identity server redirections in Edge and lastest versions of browers. WARN: Not valid in a production environment.
-            app.Use(async (context, next) =>
-            {
-                context.Response.Headers.Add("Content-Security-Policy", "script-src 'unsafe-inline'");
-                await next();
-            });
 
             app.UseForwardedHeaders();
             app.UseRouting();

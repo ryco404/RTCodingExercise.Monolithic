@@ -10,5 +10,13 @@ namespace RTCodingExercise.Monolithic.Data
         }
 
         public DbSet<Plate> Plates { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Plate>().Property(p => p.CreatedOnUtc)
+                                        .HasDefaultValueSql("GETUTCDATE()");
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

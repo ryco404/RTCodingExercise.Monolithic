@@ -1,0 +1,39 @@
+@model PlateViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-header">
+                <i class="fa fa-check-circle fa-2x"></i> <span class="h4 ms-2">Plate saved</span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Plate '@Model.Plate' has been saved successfully</h5>
+                <p class="card-text">You'll been redirected back to the plate list in <span id="timer">3</span> seconds.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(function() {
+            const $timer = $('#timer');
+
+            const i = setInterval(() => {
+                let timeLeft = +$('#timer').text();
+
+                if (timeLeft) {
+                    $timer.text(--timeLeft);
+                } else {
+                    clearInterval(i);
+
+                    document.location.href = '/';
+                }
+            }, 1000);
+        });
+    </script>
+}

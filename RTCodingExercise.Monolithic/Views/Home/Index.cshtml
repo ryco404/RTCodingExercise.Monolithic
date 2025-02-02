@@ -1,17 +1,47 @@
-﻿@model List<Plate>
+﻿@model PagedList<PlateViewModel>
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row">
+    <div class="col-sm-12 text-center">
+        <a class="btn btn-success" asp-action="Add">Add plate</a>
+    </div>
 </div>
 
-<ul>
-    @foreach(var p in Model)
-    {
-        <li>@p.Registration</li>
-    }
-</ul>
+<div class="row">
+    <div class="col-md-10 offset-md-1">
+        <table class="table table-striped">
+            <caption class="px-2" style="caption-side:top"><partial name="_PageInfo" model="Model"></partial></caption>
+            <thead>
+                <tr>
+                    <th>Plate</th>
+                    <th>Purchase Price</th>
+                    <th>Sale Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vm in Model.Items!)
+                {
+                    <tr>
+                        <td>@vm.Plate</td>
+                        <td>@vm.PurchasePrice.ToString("C2")</td>
+                        <td>@vm.SalePrice.ToString("C2")</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2"><partial name="_PageInfo" model="Model"></partial></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-10 offset-md-1">
+        <pager page-number="@Model.PageNumber" page-count="@Model.PageCount">
+        </pager>
+    </div>
+</div>
