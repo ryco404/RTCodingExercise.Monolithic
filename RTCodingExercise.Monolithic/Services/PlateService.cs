@@ -18,11 +18,14 @@ namespace RTCodingExercise.Monolithic.Services
             _plateLetterHelper = plateLetterHelper;
         }
 
-        public async Task<PagedList<PlateViewModel>> GetPlatesPagedAsync(int page)
+        public async Task<PagedList<PlateViewModel>> GetPlatesPagedAsync(int page, bool? sortSalePriceAsc)
         {
             Expression<Func<Plate, bool>> query = (_) => true;
 
-            var plates = await _entityService.GetPagedEntitiesAsync(page - 1, query, DefaultSortColumn, DefaultSortAscending);
+            var sortColumn = sortSalePriceAsc.HasValue ? nameof(Plate.SalePrice) : DefaultSortColumn;
+            var sortDir = sortSalePriceAsc ?? DefaultSortAscending;
+
+            var plates = await _entityService.GetPagedEntitiesAsync(page - 1, query, sortColumn, sortDir);
             var plateList = new PagedList<PlateViewModel>(plates);
 
             // RC: Sale price includes 20% markup

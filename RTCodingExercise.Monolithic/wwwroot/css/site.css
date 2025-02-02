@@ -16,3 +16,17 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.sort {
+  color: #ddd;
+  cursor: pointer;
+}
+
+.sort:hover {
+  color: unset;
+}
+
+.sort.sort-asc .fa-arrow-down,
+.sort.sort-desc .fa-arrow-up {
+  color: black;
+}

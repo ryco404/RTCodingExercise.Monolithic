@@ -7,6 +7,7 @@
 <div class="row">
     <div class="col-sm-12 text-center">
         <a class="btn btn-success" asp-action="Add">Add plate</a>
+        <a class="btn btn-warning" asp-action="Index">Reset sort</a>
     </div>
 </div>
 
@@ -18,7 +19,23 @@
                 <tr>
                     <th>Plate</th>
                     <th>Purchase Price</th>
-                    <th>Sale Price</th>
+                    <th>
+                        <div class="d-flex justify-content-between">
+                            <span>Sale Price</span> 
+                            @{
+                                var sortSalePriceAsc = Context.Request.Query["sortSalePriceAsc"];
+                                var nextSortSalePriceAsc = sortSalePriceAsc == "False";
+                                string sortClass = ""; 
+                                
+                                if (!string.IsNullOrEmpty(sortSalePriceAsc)) {
+                                    sortClass = nextSortSalePriceAsc ? " sort-desc" : " sort-asc";
+                                }
+                            }
+                            <a class="@($"sort{sortClass}")" title="Toggle sort direction" asp-route-sortSalePriceAsc="@nextSortSalePriceAsc">
+                                <i class="fa fa-arrow-up"></i><i class="fa fa-arrow-down"></i>
+                            </a>
+                        </div>
+                    </th>
                 </tr>
             </thead>
             <tbody>
