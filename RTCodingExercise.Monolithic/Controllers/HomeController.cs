@@ -15,9 +15,9 @@ namespace RTCodingExercise.Monolithic.Controllers
             _plateSvc = plateSvc;
         }
 
-        public async Task<IActionResult> Index(int? page, bool? sortSalePriceAsc)
+        public async Task<IActionResult> Index(int? page, bool? sortSalePriceAsc, string? search)
         {
-            var plates = await _plateSvc.GetPlatesPagedAsync(page ?? 1, sortSalePriceAsc);
+            var plates = await _plateSvc.GetPlatesPagedAsync(page ?? 1, sortSalePriceAsc, search);
 
             return View(plates);
         }

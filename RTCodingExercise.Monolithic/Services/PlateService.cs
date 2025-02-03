@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using RTCodingExercise.Monolithic.Models;
 
@@ -18,12 +17,14 @@ namespace RTCodingExercise.Monolithic.Services
             _plateLetterHelper = plateLetterHelper;
         }
 
-        public async Task<PagedList<PlateViewModel>> GetPlatesPagedAsync(int page, bool? sortSalePriceAsc)
+        public async Task<PagedList<PlateViewModel>> GetPlatesPagedAsync(int page, bool? sortSalePriceAsc, string? search)
         {
-            Expression<Func<Plate, bool>> query = (_) => true;
-
             var sortColumn = sortSalePriceAsc.HasValue ? nameof(Plate.SalePrice) : DefaultSortColumn;
             var sortDir = sortSalePriceAsc ?? DefaultSortAscending;
+
+            var possibleSearches = _plateLetterHelper.GetAllPossiblePlatesFromSearch(search);
+            // RC: Helper to build a predicate of all the possible plate matches
+            var query = PlatePedicateHelper.GetPlateSearchPredicate(possibleSearches.ToArray());
 
             var plates = await _entityService.GetPagedEntitiesAsync(page - 1, query, sortColumn, sortDir);
             var plateList = new PagedList<PlateViewModel>(plates);

@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using RTCodingExercise.Monolithic.Services;
 
 namespace RTCodingExercise.Monolithic.Models
 {
@@ -7,7 +8,7 @@ namespace RTCodingExercise.Monolithic.Models
     {
         [Required(ErrorMessage = "{0} is required")]
         [RegularExpression("[A-Z0-9]+", ErrorMessage = "Plate must only contain uppercase letters or numbers")]
-        [MaxLength(7, ErrorMessage = "Plate must not contain more than {0} characters")]
+        [MaxLength(PlateLetterHelper.MaxPlateLength, ErrorMessage = "Plate must not contain more than {0} characters")]
         public string? Plate { get; set; }
 
         [DisplayName("Purchase Price")]
