@@ -22,6 +22,9 @@ namespace RTCodingExercise.Monolithic.Services
             var fullSearch = searchItems[0];
             pred = pred.Or(p => p.Registration!.Replace(p.Numbers.ToString(), "") == fullSearch);
 
+            // RC: Only show plates that are for sale when searching for a plate
+            pred = pred.And(p => !p.IsReserved);
+
             return pred;
         }
     }
