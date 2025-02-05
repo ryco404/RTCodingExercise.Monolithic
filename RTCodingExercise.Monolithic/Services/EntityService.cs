@@ -45,9 +45,22 @@ namespace RTCodingExercise.Monolithic.Services
         public async Task SaveEntityAsync<TEntity>(TEntity entity) where TEntity : class
         {
             var dbSet = _dbContext.Set<TEntity>();
-            await dbSet.AddAsync(entity);
+            var existingEntity = dbSet.Find(_dbContext.Entry(entity).Property("Id").CurrentValue);
+
+            if (existingEntity == null)
+            {
+                await dbSet.AddAsync(entity);
+            }
 
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<TEntity?> GetEntityAsync<TEntity>(Guid id) where TEntity : class
+        {
+            var entity = await _dbContext.FindAsync<TEntity>(id);
+
+            return entity;
+        }
+
     }
 }

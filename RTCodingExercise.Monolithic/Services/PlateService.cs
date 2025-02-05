@@ -30,12 +30,7 @@ namespace RTCodingExercise.Monolithic.Services
             var plateList = new PagedList<PlateViewModel>(plates);
 
             // RC: Sale price includes 20% markup
-            plateList.Items = plates.Items!.Select(p => new PlateViewModel 
-            {
-                Plate = p.Registration,
-                PurchasePrice = p.PurchasePrice,
-                SalePrice = p.SalePrice * 1.2m
-            }).ToList();
+            plateList.Items = plates.Items!.Select(MapPlateViewModel).ToList();
 
             return plateList;
         }
@@ -44,7 +39,7 @@ namespace RTCodingExercise.Monolithic.Services
         {
             var newPlate = new Plate
             {
-                Id = Guid.NewGuid(),
+                Id =  Guid.NewGuid(),
                 Registration = plateViewModel.Plate,
                 PurchasePrice = plateViewModel.PurchasePrice,
                 SalePrice = plateViewModel.SalePrice
@@ -61,6 +56,28 @@ namespace RTCodingExercise.Monolithic.Services
             newPlate.Letters = _plateLetterHelper.GetLettersFromPlate(reg);
 
             await _entityService.SaveEntityAsync(newPlate);
+        }
+
+        public async Task SetIsReserved(Guid id, bool isReserved)
+        {
+            var plate = await _entityService.GetEntityAsync<Plate>(id)
+                ?? throw new InvalidOperationException($"No Plate found with id = {id}");
+
+            plate.IsReserved = isReserved;
+
+            await _entityService.SaveEntityAsync(plate);
+        }
+        
+        private PlateViewModel MapPlateViewModel(Plate p)
+        {
+            return new PlateViewModel 
+            {
+                Id = p.Id.ToString(),
+                Plate = p.Registration,
+                PurchasePrice = p.PurchasePrice,
+                SalePrice = p.SalePrice * 1.2m,
+                IsReserved = p.IsReserved
+            };
         }
     }
 }

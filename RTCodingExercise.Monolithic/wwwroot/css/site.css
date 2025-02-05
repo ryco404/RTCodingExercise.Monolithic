@@ -30,3 +30,12 @@ body {
 .sort.sort-desc .fa-arrow-up {
   color: black;
 }
+
+/* JQuery toaster overrides */
+.jq-toast-single {
+  font-size: .9rem;
+}
+
+.jq-toast-single h2 {
+  font-size: 1.15rem;
+}

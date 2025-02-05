@@ -42,6 +42,29 @@ namespace RTCodingExercise.Monolithic.Controllers
             return View(vm);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Reserve(string id, bool isReserved)
+        {
+            bool success = true;
+            string? errorMessage = null;
+
+            try
+            {
+                await _plateSvc.SetIsReserved(Guid.Parse(id), isReserved);
+
+                Log.Information("Plate reservation set to {isReserved} for Plate: {id}", isReserved, id);
+            }
+            catch(Exception ex)
+            {
+                success = false;
+                errorMessage = ex.Message;
+
+                Log.Error(ex, "Error updating plate reservation for Plate: {id}", id);
+            }
+
+            return Json(new { isReserved, success, errorMessage });
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

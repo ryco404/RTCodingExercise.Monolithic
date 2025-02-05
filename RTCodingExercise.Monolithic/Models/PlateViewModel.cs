@@ -6,6 +6,8 @@ namespace RTCodingExercise.Monolithic.Models
 {
     public class PlateViewModel
     {
+        public string? Id { get; set; }
+
         [Required(ErrorMessage = "{0} is required")]
         [RegularExpression("[A-Z0-9]+", ErrorMessage = "Plate must only contain uppercase letters or numbers")]
         [MaxLength(PlateLetterHelper.MaxPlateLength, ErrorMessage = "Plate must not contain more than {0} characters")]
@@ -20,5 +22,7 @@ namespace RTCodingExercise.Monolithic.Models
         [Required(ErrorMessage = "{0} is required")]
         [Range(0.01, 9_999_999.99, ErrorMessage = "Value for {0} can be no less than £{1} and no greater than £{2}")]
         public decimal SalePrice { get; set; }
+
+        public bool IsReserved { get; set; }
     }
 }

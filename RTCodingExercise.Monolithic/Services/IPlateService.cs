@@ -7,5 +7,7 @@ namespace RTCodingExercise.Monolithic.Services
         Task<PagedList<PlateViewModel>> GetPlatesPagedAsync(int page, bool? sortSalePriceAsc, string? search);
 
         Task SavePlateAsync(PlateViewModel plateViewModel);
+
+        Task SetIsReserved(Guid id, bool isReserved);
     }
 }

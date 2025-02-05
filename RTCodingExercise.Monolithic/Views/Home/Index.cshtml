@@ -43,15 +43,21 @@
                             </a>
                         </div>
                     </th>
+                    <th>
+                        Reserved
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var vm in Model.Items!)
                 {
                     <tr>
-                        <td>@vm.Plate</td>
+                        <td class="reg">@vm.Plate</td>
                         <td>@vm.PurchasePrice.ToString("C2")</td>
                         <td>@vm.SalePrice.ToString("C2")</td>
+                        <td class="text-center">
+                            <input id="@($"Reserved_{vm.Id}")" asp-for="@vm.IsReserved" type="checkbox" data-itemid="@vm.Id">
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -69,3 +75,49 @@
         </pager>
     </div>
 </div>
+
+@section scripts {
+    <script src="~/js/lodash.throttle.min.js"></script>
+    <script>
+        $(function() {
+            $('[id^="Reserved_"]').on('change',
+                // RC: Throttle request using both trailing & leading edge, meaning that any requests to update
+                // will execute before the timeout begins and subsequent requests will be blocked 
+                // until after the timeout expires. The most recent request will execute after the timeout has expired
+                _.throttle(function () {
+                    const $this = $(this);
+                    const reg = $this.parents('tr').find('.reg').text();
+
+                    $.post('@Url.Action("Reserve")', 
+                    { 
+                        id: $this.data('itemid'), 
+                        isReserved: $this.is(':checked') 
+                    },
+                    (data, status, xhr) => {
+                        const { isReserved, success, errorMessage } = data;
+
+                        if (success) {
+                            const msg = `Plate successfully ${isReserved ? '' : 'un'}reserved with registration '${reg}'`;
+                            displayPlateReserveToast(true, msg);
+                        } else {
+                            const msg = 
+                                `Error occurred upation reservation status for plate with registration '${reg}': ${errorMessage}`;
+                            displayPlateReserveToast(false, msg);
+                        }
+                    });
+                }, 500, { leading: true, trailing: true }));
+
+            const displayPlateReserveToast = (isSuccess, msg) => {
+                $.toast({
+                    heading: 'Reserve plate',
+                    text: msg,
+                    icon: isSuccess ? 'success' : 'error',
+                    loader: true,        // Change it to false to disable loader
+                    loaderBg: '#9EC600',  // To change the background
+                    position: 'bottom-right',
+                    hideAfter: 3000
+                });
+            }
+        });
+    </script>
+}

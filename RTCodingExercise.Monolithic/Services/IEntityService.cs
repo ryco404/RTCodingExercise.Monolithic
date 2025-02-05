@@ -9,5 +9,7 @@ namespace RTCodingExercise.Monolithic.Services
             string sortByColumn, bool ascending) where TEntity : class;
 
         Task SaveEntityAsync<TEntity>(TEntity entity) where TEntity : class;
+
+        Task<TEntity?> GetEntityAsync<TEntity>(Guid id) where TEntity : class;
     }
 }
