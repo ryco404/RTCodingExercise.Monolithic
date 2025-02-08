@@ -69,17 +69,17 @@ namespace RTCodingExercise.Monolithic.Services
                 var platerizedSearch = search.Replace(" ", "").ToUpper();
                 results.Add(platerizedSearch);
 
-                // RC: Allow a maximum number of substitutions as this is 2^(n-1) at the worst case
+                // RC: Allow a maximum number of substitutions as this is 2^n at the worst case
                 // but we can't have combination that exceed the maximum length anyway (max 128 searches here)
                 var replacementIndicesDigits = new List<(int, char)>();
-                for (int i = 0, subCount = 0; i < platerizedSearch.Length && subCount < MaxPlateLength; ++i)
+                var plateLength = Math.Min(platerizedSearch.Length, MaxPlateLength);
+                for (var i = 0; i < plateLength; ++i)
                 {
                     var plateChar = platerizedSearch[i];
                     var foundKv = _digitsToLetters.FirstOrDefault(kv => kv.Value == plateChar);
 
                     if (!foundKv.Equals(default(KeyValuePair<char, char>)))
                     {
-                        subCount++;
                         replacementIndicesDigits.Add((i, foundKv.Key));
                     }
                 }
@@ -87,7 +87,7 @@ namespace RTCodingExercise.Monolithic.Services
                 // RC: Generate all sets of permutations between 0..N to index our character replacement list
                 var indexPermuations = GetLetterPermuationIndices(replacementIndicesDigits.Count);
 
-                // RC: Substitute our letters for numbers for every possible permutations
+                // RC: Substitute our letters for numbers for every possible permutation
                 foreach(var indexPermuation in indexPermuations)
                 {
                     var newPlaterizedSearchBuilder = new StringBuilder(platerizedSearch);
@@ -134,6 +134,7 @@ namespace RTCodingExercise.Monolithic.Services
 
             for (var i = 0; i < tailCount; ++i)
             {
+                // RC: Append is immutable (returns new IEnumerable<int>)
                 var newHead = head.Append(tail.ElementAt(i));
                 result.Add(newHead.ToArray());
 

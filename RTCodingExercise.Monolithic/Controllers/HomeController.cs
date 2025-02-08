@@ -6,12 +6,12 @@ namespace RTCodingExercise.Monolithic.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IPlateService _plateSvc;
 
-        public HomeController(ILogger<HomeController> logger, IPlateService plateSvc)
+        private bool IsAjax => Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+
+        public HomeController(IPlateService plateSvc)
         {
-            _logger = logger;
             _plateSvc = plateSvc;
         }
 
@@ -45,6 +45,11 @@ namespace RTCodingExercise.Monolithic.Controllers
         [HttpPost]
         public async Task<IActionResult> Reserve(string id, bool isReserved)
         {
+            if (!IsAjax)
+            {
+                return NotFound();
+            }
+
             bool success = true;
             string? errorMessage = null;
 
@@ -62,7 +67,7 @@ namespace RTCodingExercise.Monolithic.Controllers
                 Log.Error(ex, "Error updating plate reservation for Plate: {id}", id);
             }
 
-            return Json(new { isReserved, success, errorMessage });
+            return Json(new PlateReservationResponseJson(isReserved, success, errorMessage));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

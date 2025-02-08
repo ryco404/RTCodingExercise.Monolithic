@@ -2,7 +2,7 @@
 {
     public static class IWebHostExtensions
     {
-        public static IWebHost MigrateDbContext<TContext>(this IWebHost webHost, Action<TContext, IServiceProvider> seeder) where TContext : DbContext
+        public static IWebHost MigrateDbContext<TContext>(this IWebHost webHost, Action<TContext?, IServiceProvider> seeder) where TContext : DbContext
         {
             using (var scope = webHost.Services.CreateScope())
             {
@@ -41,10 +41,10 @@
             return webHost;
         }
 
-        private static void InvokeSeeder<TContext>(Action<TContext, IServiceProvider> seeder, TContext context, IServiceProvider services)
+        private static void InvokeSeeder<TContext>(Action<TContext?, IServiceProvider> seeder, TContext? context, IServiceProvider services)
             where TContext : DbContext
         {
-            context.Database.Migrate();
+            context!.Database.Migrate();
             seeder(context, services);
         }
     }

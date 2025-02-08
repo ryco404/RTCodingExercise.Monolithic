@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Encodings.Web;
 using System.Web;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,7 +18,8 @@ namespace RTCodingExercise.Monolithic.TagHelpers
 
         [ViewContext]
         [HtmlAttributeNotBound]
-        public ViewContext ViewContext { get; set; }
+        [NotNull]
+        public ViewContext? ViewContext { get; set; }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
@@ -29,43 +31,43 @@ namespace RTCodingExercise.Monolithic.TagHelpers
             int lastPage = Math.Min(firstPage + (PagesToShow - 1), PageCount);
 
             var urlHelperFactory = new UrlHelperFactory();
-            var urlHelper = urlHelperFactory.GetUrlHelper(new ActionContext(ViewContext.HttpContext, ViewContext.RouteData, ViewContext.ActionDescriptor));
+            var urlHelper = urlHelperFactory.GetUrlHelper(new ActionContext(
+                ViewContext.HttpContext, ViewContext.RouteData, ViewContext.ActionDescriptor));
             var viewData = ViewContext.RouteData.Values;
             var html = string.Empty;
 
             var req = ViewContext.HttpContext.Request;
+            // RC: Parse the string representation of the query string object so we update it's values in place
             var qs = HttpUtility.ParseQueryString(req.QueryString.ToString());
 
             if (PageNumber > 1)
             {
-                AddPagingItem("<", $"{PageNumber - 1}", false);
-                AddPagingItem("<<", "1", false);
+                AddPagingItem("<", PageNumber - 1, false);
+                AddPagingItem("<<", 1, false);
             }
 
             for(var page = firstPage; page <= lastPage; ++page)
             {
-                var strPage = page.ToString();
-
-                AddPagingItem(strPage, strPage, page == PageNumber);
+                AddPagingItem(page.ToString(), page, page == PageNumber);
             }
 
             if (PageNumber < PageCount)
             {
-                AddPagingItem(">", $"{PageNumber + 1}", false);
-                AddPagingItem(">>", PageCount.ToString(), false);
+                AddPagingItem(">", PageNumber + 1, false);
+                AddPagingItem(">>", PageCount, false);
             }
 
             // Get the child content and render it inside the <ul>
             output.Content.SetHtmlContent(html);
 
-            void AddPagingItem(string label, string page, bool isSelected) {
+            void AddPagingItem(string label, int page, bool isSelected) {
                 var li = new TagBuilder("li");
                 var selected = isSelected ? " active" : "";
 
                 var a = new TagBuilder("a");
                 a.AddCssClass("page-link");
 
-                qs.Set("page", page);
+                qs.Set("page", page.ToString());
                 a.Attributes.Add("href", urlHelper.Action(viewData["action"]?.ToString()) + $"?{qs}");
 
                 a.InnerHtml.AppendHtml(label);
