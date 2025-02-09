@@ -9,9 +9,9 @@ namespace RTCodingExercise.Monolithic.Services
         public static Expression<Func<Plate, bool>> GetPlateSearchPredicate(string[] searchItems)
         {
             if (!searchItems.Any())
-                return PredicateBuilder.True<Plate>();
+                return PredicateBuilder.New<Plate>(true);
 
-            var pred = PredicateBuilder.False<Plate>();
+            var pred = PredicateBuilder.New<Plate>(false);
 
             foreach (var searchItem in searchItems)
             {

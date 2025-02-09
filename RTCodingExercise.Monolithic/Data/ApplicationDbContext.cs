@@ -9,7 +9,7 @@ namespace RTCodingExercise.Monolithic.Data
 
         }
 
-        public DbSet<Plate> Plates { get; set; }
+        public DbSet<Plate> Plates { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
